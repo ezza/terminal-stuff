@@ -1,10 +1,9 @@
 WORK_GOPATH=$HOME/Projects/99designs/go
 HOME_GOPATH=$HOME/Projects/go
 export GOPATH=$HOME_GOPATH:$WORK_GOPATH
-
-PATH="$HOME/Projects/home/terminal_stuff/shell-scripts:$HOME/bin:$HOME/Projects/golang-source/bin:$HOME_GOPATH/bin:$WORK_GOPATH/bin:/usr/local/share/npm/bin:/opt/local/bin:/opt/local/sbin:/usr/local/heroku/bin:/usr/local/bin:/usr/local/sbin:/usr/local/mysql/bin:/usr/bin:/opt/local/lib/postgresql84/bin:$HOME/.rbenv/bin:$HOME/.rbenv/plugins/ruby-build/bin:$HOME/pear/bin:$PATH"
+BASE_PATH=$HOME/dev
+PATH="$BASE_PATH/ezzaf/terminal_stuff/shell-scripts:$HOME/.rvm/bin:$HOME/bin:$PATH"
 export PATH
-
 
 # get nice colours
 TERM=xterm-color; export TERM
@@ -14,8 +13,7 @@ export LSCOLORS=DxFxCxDxDxegedabagacad
 # OS specific stuff (like editor)
 case $(uname -s) in
   Darwin)
-    # export EDITOR='subl -w' # Maybe one day I'll try again, but not this day.
-    export EDITOR='mvim -f'
+    export EDITOR='subl -w'
   ;;
   Linux)
     export EDITOR='gvim -f'
@@ -47,7 +45,7 @@ function proml {
   local NO_COLOUR="\[\033[0m\]"
 
 PS1="$RED\h$GREEN[\t]$RED:\w$GREEN\$(parse_git_branch)\
-\n👻  $NO_COLOUR"
+\n♻  $NO_COLOUR"
 PS2='> '
 PS4='+ '
 }
@@ -61,58 +59,14 @@ alias publickey='cat ~/.ssh/id_rsa.pub | pbcopy'
 alias gp="git push origin $(plain_git_branch)"
 alias gpr='git fetch origin && git rebase -p origin/$(plain_git_branch)'
 alias cowboy="git push && bin/cap production deploy"
-alias killruby="ps aux | grep [r]uby | awk '{print \$2}' | xargs kill -9"
-
-#retarded mac aliases to fix dumb shit
-alias restart_expose="killall Dock"
-alias fucking_eject="drutil tray eject"
-alias fucking_fix_dns="sudo killall -HUP mDNSResponder"
-
-alias home_docker="source ~/bin/boot2docker_up"
-
-# work stuff
-alias 99aws=". ~/.ssh/amazon/99designs/export_aws"
-alias 99up="VAGRANT_CWD=~/Projects/99designs/99dev vagrant up"
-alias 99down="VAGRANT_CWD=~/Projects/99designs/99dev vagrant halt"
-99cmd() {
-  VAGRANT_CWD=~/Projects/99designs/99dev vagrant ssh -c $1
-}
-
-export DOCKER_HOST=tcp://localhost:2375
-# This doesn't work at home, comment out on WFH days
-export docker_proxy=10.99.1.77:8080
-99clone() {
-  git clone git://github.com/99designs/$1 ~/Projects/99designs/$1
-}
-# Temporary thing for payments
-export RAW_DATABASE_URL=mysql://localhost/payments
-
-# project shortcuts with completion
-export PROJECTS="$HOME/Projects"
+alias gsta="git status"
+alias gcm="git commit -v"
+alias mate="subl"
 
 p() {
-  cd "$PROJECTS/$1"
+  cd "$BASE_PATH/lexer/$1"
 }
 
-_p() {
-  COMPREPLY=( $(compgen -W "$(ls $PROJECTS | grep -vE \"^_\")" -- ${COMP_WORDS[COMP_CWORD]} ) )
+pe() {
+  cd "$BASE_PATH/ezzaf/$1"
 }
-
-complete -F _p p
-
-# stop ctrl-D logging me out
-shopt -s -o ignoreeof
-
-# allow me to ctrl-z, ctrl-f for some retro multitasking
-export HISTIGNORE="fg*"
-bind '"\C-f": "fg %-\n"'
-
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-# use vmware by default for vagrant
-export VAGRANT_DEFAULT_PROVIDER=vmware_fusion
-
-# if kernel_task is going weird read http://www.rdoxenham.com/?p=259 (maybe make an alias to help)
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
