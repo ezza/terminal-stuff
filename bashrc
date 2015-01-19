@@ -1,6 +1,3 @@
-WORK_GOPATH=$HOME/Projects/99designs/go
-HOME_GOPATH=$HOME/Projects/go
-export GOPATH=$HOME_GOPATH:$WORK_GOPATH
 BASE_PATH=$HOME/dev
 PATH="$BASE_PATH/ezzaf/terminal_stuff/shell-scripts:$HOME/.rvm/bin:$HOME/bin:$PATH"
 export PATH
@@ -62,6 +59,7 @@ alias cowboy="git push && bin/cap production deploy"
 alias gsta="git status"
 alias gcm="git commit -v"
 alias mate="subl"
+alias l="ls -lah"
 
 p() {
   cd "$BASE_PATH/lexer/$1"
